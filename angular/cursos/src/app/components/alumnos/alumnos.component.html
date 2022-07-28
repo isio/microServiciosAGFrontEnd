@@ -1,0 +1,51 @@
+<div class="card text-bg-light mb-3">
+  <div class="card-header">{{ titulo }}</div>
+  <div class="card-body">
+    <button class="btn btn-primary my-2" routerLink="/alumnos/form">Crear</button>
+    <div class="alert alert-info" *ngIf="lista?.length == 0">No hay alumnos en el sistema</div>
+    <table class="table table-hover table-striped" *ngIf="lista?.length != 0">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Foto</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>eMail</th>
+        <th>Creado En</th>
+        <th>Examenes</th>
+        <th>Editar</th>
+        <th>Eliminar</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let alumno of lista">
+        <td>{{ alumno.id }}</td>
+        <td>
+          <img *ngIf="alumno.fotoHashCode"
+            [src]="baseEndPoint + '/uploads/img/' + alumno.id + '?fotoHashCode=' + alumno.fotoHashCode"
+            class="img-thumbnail rounded" style="width: 64px; cursor: pointer;">
+          <img *ngIf="!alumno.fotoHashCode"
+               [src]="'/assets/images/no-usuario.png'"
+               class="img-thumbnail rounded" style="width: 64px; cursor: pointer;">
+        </td>
+        <td>{{ alumno.nombre }}</td>
+        <td>{{ alumno.apellido }}</td>
+        <td>{{ alumno.email }}</td>
+        <td>{{ alumno.createAt | date: 'yyyy/MM/dd' }}</td>
+        <td><button class="btn btn-primary btn-sm" [routerLink]="['/alumnos/responder-examen', alumno.id]">Responder</button></td>
+        <td><button class="btn btn-secondary btn-sm" [routerLink]="['/alumnos/form', alumno.id]">Editar</button></td>
+        <td><button class="btn btn-danger btn-sm" (click)="eliminar(alumno)">Eliminar</button></td>
+      </tr>
+      </tbody>
+    </table>
+    <mat-paginator [length]="totalRegistros"
+                   [pageSize]="totalPorPagina"
+                   [pageIndex]="paginaActual"
+                   [pageSizeOptions]="pageSizeOptions"
+                   aria-label="Select page"
+                   (page)="paginar($event)"
+                   showFirstLastButtons
+                   class="float-start mx-2">
+    </mat-paginator>
+  </div>
+</div>
